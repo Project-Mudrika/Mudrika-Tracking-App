@@ -6,22 +6,10 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  // ignore: prefer_const_constructors_in_immutables
   MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final location = LocationService();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,25 +19,7 @@ class _MyAppState extends State<MyApp> {
         ),
         home: SafeArea(
           child: Scaffold(
-            body: FutureBuilder(
-              future: location.determinePosition(),
-              builder: (_, currLocation) {
-                if (currLocation.hasData) {
-                  return MapPage(
-                    latitude: currLocation.data?.latitude ?? 28.644800,
-                    longitude: currLocation.data?.longitude ?? 77.216721,
-                  );
-                } else {
-                  return const SizedBox(
-                    height: 500,
-                    width: 500,
-                    child: Center(
-                        child: Text("Location Loading",
-                            style: TextStyle(fontSize: 20))),
-                  );
-                }
-              },
-            ),
+            body: MapPage(),
           ),
         ));
   }

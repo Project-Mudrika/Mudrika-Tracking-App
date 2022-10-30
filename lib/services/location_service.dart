@@ -41,4 +41,8 @@ class LocationService {
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
+
+  Stream<Position> livePosition() {
+    return Geolocator.getPositionStream();
+  }
 }

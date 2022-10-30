@@ -1,75 +1,105 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/container.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:live_tracking/services/location_service.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
 
 class MapPage extends StatefulWidget {
-  MapPage({super.key, required this.latitude, required this.longitude});
-  final double latitude, longitude;
+  MapPage({super.key});
+  final LocationService _locationService = LocationService();
+  final _mapController = MapTileLayerController();
+  final _mapZoomPanController = MapZoomPanBehavior();
 
   @override
   State<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  final _mapController = MapTileLayerController();
+  late Position currLocation;
+
+  @override
+  void initState() {
+    var currLocationStream = LocationService();
+
+    currLocationStream.livePosition().listen((Position newPostion) {
+      currLocation = newPostion;
+      widget._mapController.updateMarkers([0]);
+      widget._mapZoomPanController.focalLatLng =
+          MapLatLng(currLocation.latitude, currLocation.longitude);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var movlat = widget.latitude;
-    var movlong = widget.longitude;
-    return Stack(
-      children: [
-        SfMaps(
-          layers: [
-            MapTileLayer(
-              zoomPanBehavior: MapZoomPanBehavior(
-                enablePanning: true,
-                enableDoubleTapZooming: true,
-                enablePinching: true,
-                enableMouseWheelZooming: true,
-              ),
-              initialMarkersCount: 1,
-              urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-              initialZoomLevel: 15,
-              initialFocalLatLng: MapLatLng(widget.latitude, widget.longitude),
-              controller: _mapController,
-              markerBuilder: (BuildContext context, int index) {
-                return MapMarker(
-                  size: const Size(14, 14),
-                  iconColor: Colors.black,
-                  latitude: movlat,
-                  longitude: movlong,
-                );
-              },
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            FloatingActionButton(
-              child: Text('Add marker'),
-              onPressed: () {
-                _mapController.insertMarker(0);
-              },
-            ),
-            FloatingActionButton(
-              child: Text('Update marker'),
-              onPressed: () async {
-                movlat += 0.0001;
-                movlong += 0.0001;
-                _mapController.updateMarkers([0]);
-                // final locationService = LocationService();
-                // var loc = await locationService.determinePosition();
-                // print("Lat: ${loc.latitude}");
-              },
-            ),
-          ],
-        )
-      ],
-    );
+    return FutureBuilder(
+        future: widget._locationService.determinePosition(),
+        builder: (_, initLocationSnapshot) {
+          if (initLocationSnapshot.hasData) {
+            return Stack(
+              children: [
+                SfMaps(
+                  layers: [
+                    MapTileLayer(
+                      zoomPanBehavior: widget._mapZoomPanController,
+                      initialMarkersCount: 1,
+                      urlTemplate:
+                          "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                      initialZoomLevel: 15,
+                      initialFocalLatLng: MapLatLng(
+                          initLocationSnapshot.data!.latitude,
+                          initLocationSnapshot.data!.longitude),
+                      controller: widget._mapController,
+                      markerBuilder: (BuildContext context, int index) {
+                        return MapMarker(
+                          size: const Size(18, 18),
+                          iconColor: Colors.black87,
+                          latitude: currLocation.latitude,
+                          longitude: currLocation.longitude,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: Row(
+                    children: [
+                      FloatingActionButton(
+                        child: const Icon(Icons.add),
+                        onPressed: () {
+                          if (widget._mapZoomPanController.zoomLevel <
+                              widget._mapZoomPanController.maxZoomLevel) {
+                            widget._mapZoomPanController.zoomLevel += 1;
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      FloatingActionButton(
+                        child: const Icon(Icons.remove),
+                        onPressed: () {
+                          if (widget._mapZoomPanController.zoomLevel >
+                              widget._mapZoomPanController.minZoomLevel) {
+                            widget._mapZoomPanController.zoomLevel -= 1;
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            );
+          } else {
+            return const SizedBox(
+              height: 500,
+              width: 500,
+              child: Center(
+                  child: Text("Live Tracking Loading",
+                      style: TextStyle(fontSize: 20))),
+            );
+          }
+        });
   }
 }
