@@ -1,16 +1,17 @@
 name: live_tracking
 description: Live tracking for Mudrika mobile application
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.0-271.7.beta <3.0.0'
+  sdk: ">=2.18.0-271.7.beta <3.0.0"
 
 dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
   geolocator: ^9.0.2
+  google_fonts: ^3.0.1
   syncfusion_flutter_maps: ^20.3.52
 
 dev_dependencies:
@@ -26,3 +27,4 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/icons/
