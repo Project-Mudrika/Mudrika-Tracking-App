@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   geolocator: ^9.0.2
   syncfusion_flutter_maps: ^20.3.52
+  web_socket_channel: ^2.2.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
