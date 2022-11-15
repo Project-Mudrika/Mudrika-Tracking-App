@@ -8,11 +8,15 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.2
+  dart_web3: ^0.0.3
   flutter:
     sdk: flutter
+  flutter_svg: ^1.1.6
   geolocator: ^9.0.2
   google_fonts: ^3.0.1
   syncfusion_flutter_maps: ^20.3.52
+  url_launcher: ^6.1.6
+  walletconnect_dart: any
 
 dev_dependencies:
   flutter_lints: ^2.0.0

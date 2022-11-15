@@ -1,7 +1,10 @@
+import 'package:dart_web3/dart_web3.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_tracking/screens/map_page.dart';
 import 'package:live_tracking/services/location_service.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:walletconnect_dart/walletconnect_dart.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,6 +39,34 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  loginWithWallet() async {
+    var _session;
+    var _account;
+    print("Pressed");
+    final connector = WalletConnect(
+        bridge: "https://bridge.wallectconnect.org",
+        clientMeta: const PeerMeta(
+            name: "Project Mudrika",
+            description: "Disaster Management Infrastructure"));
+    connector.on('connect', (session) => print("Connecting: $session"));
+    connector.on('session_update', (payload) => print("Payload: $payload"));
+    connector.on('disconnect', (session) => print("Disconnected: $session"));
+
+    if (!connector.connected) {
+      _session = await connector.createSession(
+          chainId: 80001,
+          onDisplayUri: ((uri) async => {
+                print("Connection URI: $uri"),
+                await launchUrl(Uri.parse(uri))
+              }));
+    }
+
+    setState(() {
+      _account = _session.accounts[0];
+      print("Account: $_account");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -71,17 +102,21 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-                onPressed: () {},
+                onPressed: () async => loginWithWallet(),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5b5750)),
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.wallet),
-                      SizedBox(width: 8),
-                      Text("Sign In with Metamask"),
+                    children: [
+                      Image.asset(
+                        "assets/icons/metamask.png",
+                        width: 16,
+                      ),
+                      const SizedBox(width: 8),
+                      Text("Sign In with Metamask",
+                          style: GoogleFonts.varelaRound()),
                     ],
                   ),
                 ))
