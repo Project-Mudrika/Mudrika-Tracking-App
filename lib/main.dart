@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_tracking/screens/map_page.dart';
 import 'package:live_tracking/services/location_service.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
 
 void main() {
@@ -39,26 +40,31 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  loginWithWallet() async {
-    var _session;
-    var _account;
-    print("Pressed");
-    final connector = WalletConnect(
-        bridge: "https://bridge.wallectconnect.org",
-        clientMeta: const PeerMeta(
-            name: "Project Mudrika",
-            description: "Disaster Management Infrastructure"));
-    connector.on('connect', (session) => print("Connecting: $session"));
-    connector.on('session_update', (payload) => print("Payload: $payload"));
-    connector.on('disconnect', (session) => print("Disconnected: $session"));
+  var connector = WalletConnect(
+      bridge: 'https://bridge.walletconnect.org',
+      clientMeta: const PeerMeta(
+          name: 'My App',
+          description: 'An app for converting pictures to NFT',
+          url: 'https://walletconnect.org',
+          icons: [
+            'https://files.gitbook.com/v0/b/gitbook-legacy-files/o/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'
+          ]));
 
+  var _session, _uri, _account;
+
+  loginWithWallet(BuildContext context) async {
     if (!connector.connected) {
-      _session = await connector.createSession(
-          chainId: 80001,
-          onDisplayUri: ((uri) async => {
-                print("Connection URI: $uri"),
-                await launchUrl(Uri.parse(uri))
-              }));
+      try {
+        var session = await connector.createSession(onDisplayUri: (uri) async {
+          _uri = uri;
+          await launchUrlString(uri, mode: LaunchMode.externalApplication);
+        });
+        setState(() {
+          _session = session;
+        });
+      } catch (exp) {
+        print(exp);
+      }
     }
 
     setState(() {
@@ -102,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-                onPressed: () async => loginWithWallet(),
+                onPressed: () async => await loginWithWallet(context),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5b5750)),
                 child: Padding(
