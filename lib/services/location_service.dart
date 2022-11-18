@@ -1,5 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:live_tracking/services/websocket_service.dart';
+import 'dart:io';
 
 class LocationService {
   final WebSocketService _socketService = WebSocketService();
@@ -51,16 +52,25 @@ class LocationService {
       _socketService.sendLocation(
           latitude: position.latitude,
           longitude: position.longitude,
-          driverID: "driverID");
+          driverID: "driver1");
     });
+  }
+
+  Stream<Position> receiveLocationUpdates() {
+    // _socketService.receiveLocation(driverID: "driverID").forEach((element) {
+    //   print(element);
+    // });
+    return _socketService.receiveLocation(driverID: "driverID");
+  }
+
+  Future<Position> receiveInitialLocation(driverID) async {
+    return _socketService.receiveLocation(driverID: driverID).elementAt(0);
   }
 
   Stream<Position> livePosition() {
     Stream<Position> currentPosition = Geolocator.getPositionStream();
     sendLocationUpdates(currentPosition);
-    _socketService.receiveLocation(driverID: "driverID").forEach((element) {
-      print(element);
-    });
+    // receiveLocationUpdates();
     return currentPosition;
   }
 }

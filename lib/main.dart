@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:live_tracking/screens/map_page.dart';
+import 'package:live_tracking/screens/user_selector.dart';
 import 'package:live_tracking/services/location_service.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         ),
         home: SafeArea(
           child: Scaffold(
-            body: MapPage(),
+            body: UserSelector(),
           ),
         ));
   }
