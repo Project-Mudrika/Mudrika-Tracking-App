@@ -19,6 +19,7 @@ class _QRScannerState extends State<QRScanner> {
     var firstCamera = cameras.first;
     var controller = CameraController(firstCamera, ResolutionPreset.medium);
     controller.initialize();
+
     return controller;
   }
 
@@ -34,13 +35,12 @@ class _QRScannerState extends State<QRScanner> {
         future: _controller,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-              children: [
-                CameraPreview(snapshot.data!),
-                Positioned(
-                    right: 10,
-                    bottom: 10,
-                    child: FloatingActionButton(onPressed: () async {
+            return Scaffold(
+              body: CameraPreview(snapshot.data!),
+              floatingActionButton: Row(
+                children: [
+                  FloatingActionButton(
+                    onPressed: () async {
                       try {
                         await _controller;
                         final image = await snapshot.data?.takePicture();
@@ -53,8 +53,15 @@ class _QRScannerState extends State<QRScanner> {
                       } catch (e) {
                         print(e);
                       }
-                    })),
-              ],
+                    },
+                    child: const Text("Capture"),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () => setState(() {}),
+                    child: const Text("Scan QR"),
+                  ),
+                ],
+              ),
             );
           } else {
             return const Center(child: CircularProgressIndicator());
