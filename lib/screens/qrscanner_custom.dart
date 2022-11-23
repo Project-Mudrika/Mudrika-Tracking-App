@@ -18,7 +18,26 @@ class _QRScannerState extends State<QRScanner> {
     var cameras = await availableCameras();
     var firstCamera = cameras.first;
     var controller = CameraController(firstCamera, ResolutionPreset.medium);
-    controller.initialize();
+    // If the controller is updated then update the UI.
+    controller.addListener(() {
+      if (mounted) {
+        setState(() {});
+      }
+
+      if (controller.value.hasError) {
+        print('Camera error ${controller.value.errorDescription}');
+      }
+    });
+
+    try {
+      await controller.initialize();
+    } on CameraException catch (e) {
+      print(e);
+    }
+
+    if (mounted) {
+      setState(() {});
+    }
 
     return controller;
   }
@@ -38,6 +57,7 @@ class _QRScannerState extends State<QRScanner> {
             return Scaffold(
               body: CameraPreview(snapshot.data!),
               floatingActionButton: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FloatingActionButton(
                     onPressed: () async {
@@ -54,11 +74,7 @@ class _QRScannerState extends State<QRScanner> {
                         print(e);
                       }
                     },
-                    child: const Text("Capture"),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () => setState(() {}),
-                    child: const Text("Scan QR"),
+                    child: const Icon(Icons.camera),
                   ),
                 ],
               ),

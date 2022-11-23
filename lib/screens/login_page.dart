@@ -94,8 +94,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const QRScanner())),
+                onPressed: () => Navigator.push(
+                    context,
+                    // ignore: prefer_const_constructors
+                    MaterialPageRoute(builder: (context) => QRScanner())),
                 // onPressed: () async {
                 //   await loginWithWallet(context);
                 //   if (!mounted) {
