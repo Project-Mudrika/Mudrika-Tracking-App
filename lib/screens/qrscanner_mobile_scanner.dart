@@ -16,7 +16,7 @@ class _QRScannerState extends State<QRScanner> {
       body: MobileScanner(
           allowDuplicates: false,
           controller: MobileScannerController(
-              facing: CameraFacing.front, torchEnabled: true),
+              facing: CameraFacing.back, torchEnabled: false),
           onDetect: (barcode, args) {
             if (barcode.rawValue == null) {
               debugPrint('Failed to scan Barcode');
