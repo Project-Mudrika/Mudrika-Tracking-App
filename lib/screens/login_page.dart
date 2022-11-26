@@ -111,13 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5b5750)),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset(
                         "assets/icons/metamask.png",
-                        width: 16,
+                        width: 27,
                       ),
                       const SizedBox(width: 8),
                       Text("Sign In with Metamask",

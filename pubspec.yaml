@@ -14,7 +14,7 @@ dependencies:
   flutter_svg: ^1.1.6
   geolocator: ^9.0.2
   google_fonts: ^3.0.1
-  mobile_scanner: ^2.1.0
+  mobile_scanner: ^3.0.0-beta.1
   syncfusion_flutter_maps: ^20.3.52
   url_launcher: ^6.1.6
   walletconnect_dart: ^0.0.11

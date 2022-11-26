@@ -14,14 +14,14 @@ class _QRScannerState extends State<QRScanner> {
     return Scaffold(
       appBar: AppBar(title: const Text('Mobile Scanner')),
       body: MobileScanner(
-          allowDuplicates: false,
+          // allowDuplicates: false,
           controller: MobileScannerController(
               facing: CameraFacing.back, torchEnabled: false),
-          onDetect: (barcode, args) {
-            if (barcode.rawValue == null) {
+          onDetect: (barcode) {
+            if (barcode.barcodes.first.rawValue == null) {
               debugPrint('Failed to scan Barcode');
             } else {
-              final String code = barcode.rawValue!;
+              final String code = barcode.barcodes.first.rawValue!;
               debugPrint('Barcode found! $code');
             }
           }),
