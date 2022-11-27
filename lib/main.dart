@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:live_tracking/models/AccountInfo.dart';
 import 'package:live_tracking/screens/login_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (BuildContext context) => AccountInfo(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
