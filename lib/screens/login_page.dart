@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:live_tracking/main.dart';
+import 'package:live_tracking/models/AccountInfo.dart';
+import 'package:live_tracking/screens/landing_page.dart';
 import 'package:live_tracking/screens/qrscanner_mobile_scanner.dart';
-// import 'package:live_tracking/screens/qrscanner.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
 
@@ -38,10 +41,15 @@ class _LoginPageState extends State<LoginPage> {
       } catch (exp) {
         print(exp);
       }
+    } else {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LandingPage()));
     }
 
     setState(() {
       _account = _session.accounts[0];
+      Provider.of<AccountInfo>(context, listen: false)
+          .updateAccountField("accountAddress", _account);
       print("Account: $_account");
     });
   }
@@ -94,20 +102,20 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-                onPressed: () => Navigator.push(
-                    context,
-                    // ignore: prefer_const_constructors
-                    MaterialPageRoute(builder: (context) => QRScanner())),
-                // onPressed: () async {
-                //   await loginWithWallet(context);
-                //   if (!mounted) {
-                //     return;
-                //   }
-                //   Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => const QRScanner()));
-                // },
+                // onPressed: () => Navigator.push(
+                //     context,
+                //     // ignore: prefer_const_constructors
+                //     MaterialPageRoute(builder: (context) => QRScanner())),
+                onPressed: () async {
+                  await loginWithWallet(context);
+                  if (!mounted) {
+                    return;
+                  }
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LandingPage()));
+                },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5b5750)),
                 child: Padding(
