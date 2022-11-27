@@ -54,6 +54,16 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+// Load Landing Page if wallet is already connected
+  @override
+  void initState() {
+    super.initState();
+    if (connector.connected) {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LandingPage()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     connector.on(
