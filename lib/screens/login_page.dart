@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:live_tracking/main.dart';
 import 'package:live_tracking/models/AccountInfo.dart';
 import 'package:live_tracking/screens/landing_page.dart';
 import 'package:live_tracking/screens/qrscanner_mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:walletconnect_dart/walletconnect_dart.dart';
+
+const bool LOGIN_DEV_FLAG = true;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,8 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   var connector = WalletConnect(
       bridge: 'https://bridge.walletconnect.org',
       clientMeta: const PeerMeta(
-          name: 'My App',
-          description: 'An app for converting pictures to NFT',
+          name: 'Mudrika',
+          description: 'Disaster Management Infrastructure',
           url: 'https://walletconnect.org',
           icons: [
             'https://files.gitbook.com/v0/b/gitbook-legacy-files/o/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'
@@ -28,7 +29,13 @@ class _LoginPageState extends State<LoginPage> {
 
   var _session, _uri, _account;
 
-  loginWithWallet(BuildContext context) async {
+  loginWithWallet(BuildContext context, {bool devFlag = false}) async {
+    if (devFlag) {
+      _account = "0xd1CfE5c21023C4F9TESTa7dACCOUNT22Bb4742";
+      Provider.of<AccountInfo>(context, listen: false)
+          .updateAccountField("accountAddress", _account);
+      return;
+    }
     if (!connector.connected) {
       try {
         var session = await connector.createSession(onDisplayUri: (uri) async {
@@ -117,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                 //     // ignore: prefer_const_constructors
                 //     MaterialPageRoute(builder: (context) => QRScanner())),
                 onPressed: () async {
-                  await loginWithWallet(context);
+                  await loginWithWallet(context, devFlag: LOGIN_DEV_FLAG);
                   if (!mounted) {
                     return;
                   }

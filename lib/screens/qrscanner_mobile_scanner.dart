@@ -9,6 +9,12 @@ class QRScanner extends StatefulWidget {
 }
 
 class _QRScannerState extends State<QRScanner> {
+  var _qrValue;
+  // qrValue = {
+  //  8ohdf990hw0f;0xFF5b57500odj34j;0x048jsd8ds96s
+  //  (consID; senderAddress; receiverAddress)
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +28,9 @@ class _QRScannerState extends State<QRScanner> {
               debugPrint('Failed to scan Barcode');
             } else {
               final String code = barcode.barcodes.first.rawValue!;
+              setState(() {
+                _qrValue = code;
+              });
               debugPrint('Barcode found! $code');
             }
           }),
