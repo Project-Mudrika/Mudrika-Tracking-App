@@ -56,11 +56,11 @@ class LocationService {
     });
   }
 
-  Stream<Position> receiveLocationUpdates() {
+  Stream<Position> receiveLocationUpdates(driverID) {
     // _socketService.receiveLocation(driverID: "driverID").forEach((element) {
     //   print(element);
     // });
-    return _socketService.receiveLocation(driverID: "driverID");
+    return _socketService.receiveLocation(driverID: driverID);
   }
 
   Future<Position> receiveInitialLocation(driverID) async {

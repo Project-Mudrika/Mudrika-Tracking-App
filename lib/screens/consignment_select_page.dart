@@ -21,7 +21,7 @@ class ConsignmentSelect extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (_) => MapPage(
-                                userType: UserType.driver,
+                                userType: UserType.authority,
                                 driverId: driverIDs[index],
                               )));
                 }),

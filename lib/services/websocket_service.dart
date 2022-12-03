@@ -4,9 +4,7 @@ import 'dart:io';
 
 class WebSocketService {
   final _channel = WebSocketChannel.connect(
-      // Uri.parse("wss://echo.websocket.events"),
-      Uri.parse("ws://localhost:8765"));
-  // Uri.parse("ws://10.0.2.2:8765"));
+      Uri.parse("wss://mudrika-websocket-server.ajayk-01.repl.co"));
 
   // to send the location of a driver to the server
   sendLocation({required latitude, required longitude, required driverID}) {

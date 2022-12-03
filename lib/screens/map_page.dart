@@ -25,14 +25,16 @@ class _MapPageState extends State<MapPage> {
 
     if (widget.userType == UserType.driver) {
       currLocationStream.livePosition().listen((Position newPostion) {
-        // currLocation = newPostion;
+        currLocation = newPostion;
         print("whyy");
         widget._mapController.updateMarkers([0]);
         widget._mapZoomPanController.focalLatLng =
             MapLatLng(currLocation.latitude, currLocation.longitude);
       });
     } else if (widget.userType == UserType.authority) {
-      currLocationStream.receiveLocationUpdates().listen((Position newPostion) {
+      currLocationStream
+          .receiveLocationUpdates(widget.driverId)
+          .listen((Position newPostion) {
         currLocation = newPostion;
         print("works here");
         print("${currLocation.latitude} ${currLocation.longitude}");
@@ -46,15 +48,15 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    currLocation = const Position(
-        longitude: 0,
-        latitude: 0,
-        timestamp: null,
-        accuracy: 0,
-        altitude: 0,
-        heading: 0,
-        speed: 0,
-        speedAccuracy: 0);
+    // currLocation = Position(
+    //     longitude: 0,
+    //     latitude: 0,
+    //     timestamp: null,
+    //     accuracy: 0,
+    //     altitude: 0,
+    //     heading: 0,
+    //     speed: 0,
+    //     speedAccuracy: 0);
     return Scaffold(
       body: FutureBuilder(
           future: widget.userType == UserType.driver
@@ -81,7 +83,7 @@ class _MapPageState extends State<MapPage> {
                         controller: widget._mapController,
                         markerBuilder: (BuildContext context, int index) {
                           return MapMarker(
-                            size: const Size(18, 18),
+                            size: const Size(22, 22),
                             iconColor: Colors.black87,
                             latitude: currLocation.latitude,
                             longitude: currLocation.longitude,
