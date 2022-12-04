@@ -26,7 +26,8 @@ class _LandingPageState extends State<LandingPage> {
     }
     var _accountAddress = Provider.of<AccountInfo>(context, listen: false)
         .accountInfo["accountAddress"];
-    fetchAccountInfo(_accountAddress!);
+    var accountDetails = fetchAccountInfo(_accountAddress!)
+        .then((value) => print("Received details: $value"));
   }
 
   @override
@@ -94,10 +95,15 @@ class _LandingPageState extends State<LandingPage> {
 
 final supabase = Supabase.instance.client;
 
-Future<void> fetchAccountInfo(String _accountAddress) async {
+Future<dynamic> fetchAccountInfo(String _accountAddress) async {
+  late dynamic accountDetails;
   var response = await supabase
       .from('driver')
       .select()
       .eq("account_address", _accountAddress)
-      .then((value) => print(value));
+      .then((value) {
+    print(value);
+    accountDetails = value;
+  });
+  return accountDetails;
 }
