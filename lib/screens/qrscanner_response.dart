@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:live_tracking/models/Consignment.dart';
 import 'package:provider/provider.dart';
 
@@ -19,25 +20,80 @@ class QRScannerResponsePage extends StatelessWidget {
           backgroundColor: const Color(0xFF33322B)),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 28),
-        child: Card(
+        child: SizedBox.expand(
+          child: Card(
+              child: Padding(
+            padding: const EdgeInsets.all(32.0),
             child: Column(
-          children: [
-            const Text("From"),
-            // Consumer<Consignment>(
-            //   builder: (context, consignmentDetails, child) {
-            //     return Text(consignmentDetails.consignment["sender"]!);
-            //   },
-            // ),
-            Text(sender!),
-            const Text("To"),
-            // Consumer<Consignment>(
-            //   builder: (context, consignmentDetails, child) {
-            //     return Text(consignmentDetails.consignment["receiver"]!);
-            //   },
-            // ),
-            Text(receiver!)
-          ],
-        )),
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Consignment Transit",
+                  style: GoogleFonts.lora(
+                    fontSize: 24,
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                Text(
+                  "From",
+                  style: GoogleFonts.montserrat(fontSize: 18),
+                ),
+
+                // Consumer<Consignment>(
+                //   builder: (context, consignmentDetails, child) {
+                //     return Text(consignmentDetails.consignment["sender"]!);
+                //   },
+                // ),
+
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  const Icon(Icons.location_on_outlined),
+                  Text(
+                    receiver!,
+                    style: GoogleFonts.montserrat(
+                        fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
+                ]),
+                Text(
+                  "To",
+                  style: GoogleFonts.montserrat(fontSize: 18),
+                ),
+                // Consumer<Consignment>(
+                //   builder: (context, consignmentDetails, child) {
+                //     return Text(consignmentDetails.consignment["receiver"]!);
+                //   },
+                // ),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  const Icon(Icons.location_on),
+                  Text(
+                    sender!,
+                    style: GoogleFonts.montserrat(
+                        fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
+                ]),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.bus_alert),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Text(
+                        "Start Journey",
+                        style: GoogleFonts.montserrat(
+                            fontSize: 18, fontWeight: FontWeight.w600),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )),
+        ),
       ),
     );
   }
