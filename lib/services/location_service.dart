@@ -1,6 +1,10 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:live_tracking/services/websocket_service.dart';
+import 'dart:io';
 
 class LocationService {
+  final WebSocketService _socketService = WebSocketService();
+
   /// Determine the current position of the device.
   ///
   /// When the location services are not enabled or permissions
@@ -42,7 +46,31 @@ class LocationService {
     return await Geolocator.getCurrentPosition();
   }
 
+  sendLocationUpdates(Stream<Position> location) {
+    location.forEach((position) {
+      print(" ${position.latitude} , ${position.longitude} ");
+      _socketService.sendLocation(
+          latitude: position.latitude,
+          longitude: position.longitude,
+          driverID: "driver1");
+    });
+  }
+
+  Stream<Position> receiveLocationUpdates(driverID) {
+    // _socketService.receiveLocation(driverID: "driverID").forEach((element) {
+    //   print(element);
+    // });
+    return _socketService.receiveLocation(driverID: driverID);
+  }
+
+  Future<Position> receiveInitialLocation(driverID) async {
+    return _socketService.receiveLocation(driverID: driverID).elementAt(0);
+  }
+
   Stream<Position> livePosition() {
-    return Geolocator.getPositionStream();
+    Stream<Position> currentPosition = Geolocator.getPositionStream();
+    sendLocationUpdates(currentPosition);
+    // receiveLocationUpdates();
+    return currentPosition;
   }
 }
