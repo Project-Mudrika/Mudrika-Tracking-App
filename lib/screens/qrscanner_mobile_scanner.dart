@@ -42,21 +42,21 @@ class _QRScannerState extends State<QRScanner> {
                 _consId = splitCode[0];
                 _sender = splitCode[1];
                 _receiver = splitCode[2];
-
-                var consDetails =
-                    fetchConsignmentDetails(_sender, _receiver).then((value) {
-                  print("Consignment details: $value");
-                  Provider.of<Consignment>(context, listen: false)
-                      .updateConsignmentField("sender", value[0]);
-                  Provider.of<Consignment>(context, listen: false)
-                      .updateConsignmentField("receiver", value[1]);
-                }).then((value) => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const QRScannerResponsePage(),
-                        )));
               });
-
+              // var consDetails =
+              fetchConsignmentDetails(_sender, _receiver).then((value) {
+                print("Consignment details: $value");
+                // Provider.of<Consignment>(context, listen: false)
+                //     .updateConsignmentField("sender", value[0]);
+                // Provider.of<Consignment>(context, listen: false)
+                //     .updateConsignmentField("receiver", value[1]);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QRScannerResponsePage(
+                          sender: value[0], receiver: value[1]),
+                    ));
+              });
               debugPrint('Barcode found! $code');
             }
           }),
