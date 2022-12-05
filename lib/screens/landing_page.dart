@@ -65,26 +65,36 @@ class _LandingPageState extends State<LandingPage> {
                         blurRadius: 10,
                         offset: const Offset(0, 2))
                   ]),
-              child: ElevatedButton(
-                // margin: const EdgeInsets.all(16),
+              child:
+                  Consumer<AccountInfo>(builder: (context, accountInfo, child) {
+                return ElevatedButton(
+                  // margin: const EdgeInsets.all(16),
 
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5b5750)),
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const QRScanner())),
-                  child: Padding(
-                    padding: const EdgeInsets.all(48.0),
-                    child: Column(children: const [
-                      Icon(Icons.qr_code_scanner),
-                      Text("Scan QR Code")
-                    ]),
+                  onPressed: () async {
+                    if (await isAuthority(
+                        accountInfo.accountInfo['accountAddress']!)) {
+                      print("Authority aane");
+                    } else {
+                      print("Driver aane");
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF5b5750)),
+                  child: InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const QRScanner())),
+                    child: Padding(
+                      padding: const EdgeInsets.all(48.0),
+                      child: Column(children: const [
+                        Icon(Icons.qr_code_scanner),
+                        Text("Scan QR Code")
+                      ]),
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
             ),
           )
         ]),
@@ -106,4 +116,15 @@ Future<dynamic> fetchAccountInfo(String _accountAddress) async {
     accountDetails = value;
   });
   return accountDetails;
+}
+
+Future<bool> isAuthority(String _accountAddress) async {
+  late dynamic fetchedInfo;
+  await supabase
+      .from('driver')
+      .select("account_address")
+      .eq("account_address", _accountAddress)
+      .then((value) => fetchedInfo = value);
+  print("IsAuthority: $fetchedInfo");
+  return fetchedInfo == [];
 }

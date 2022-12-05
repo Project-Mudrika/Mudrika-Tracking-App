@@ -44,7 +44,7 @@ class _QRScannerState extends State<QRScanner> {
                 _receiver = splitCode[2];
               });
               // var consDetails =
-              fetchConsignmentDetails(_sender, _receiver).then((value) {
+              fetchConsignmentDetails(_consId, _receiver).then((value) {
                 print("Consignment details: $value");
                 // Provider.of<Consignment>(context, listen: false)
                 //     .updateConsignmentField("sender", value[0]);
@@ -65,15 +65,15 @@ class _QRScannerState extends State<QRScanner> {
 }
 
 Future<List<dynamic>> fetchConsignmentDetails(
-    String sender, String receiver) async {
+    String consId, String receiver) async {
   late List<String> consignmentDetails = ["", ""];
   var senderResponse = await supabase
-      .from('authority')
-      .select("district")
-      .eq("accid", sender)
+      .from('consignments')
+      .select("location")
+      .eq("cons_id", consId)
       .then((value) {
-    print("sender $sender : $value");
-    return consignmentDetails[0] = value[0]["district"];
+    print("sender $consId : $value");
+    return consignmentDetails[0] = value[0]["location"];
   });
   var receiverResponse = await supabase
       .from('authority')
