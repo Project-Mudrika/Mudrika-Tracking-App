@@ -67,32 +67,62 @@ class _LandingPageState extends State<LandingPage> {
                   ]),
               child:
                   Consumer<AccountInfo>(builder: (context, accountInfo, child) {
-                return ElevatedButton(
-                  // margin: const EdgeInsets.all(16),
-
-                  onPressed: () async {
-                    if (await isAuthority(
-                        accountInfo.accountInfo['accountAddress']!)) {
-                      print("Authority aane");
-                    } else {
-                      print("Driver aane");
+                return FutureBuilder(
+                  builder: ((context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text("${snapshot.error} has occurred"),
+                        );
+                      } else if (snapshot.hasData) {
+                        if (snapshot.data!) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              // Don't put anything here
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF5b5750)),
+                            child: InkWell(
+                              onTap: () {
+                                // Put the authority tracking page in Navigator.pushReplacement here
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(48.0),
+                                child: Column(children: const [
+                                  Icon(Icons.location_on_sharp),
+                                  Text("Track latest consignment")
+                                ]),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF5b5750)),
+                            child: InkWell(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const QRScanner())),
+                              child: Padding(
+                                padding: const EdgeInsets.all(48.0),
+                                child: Column(children: const [
+                                  Icon(Icons.qr_code_scanner),
+                                  Text("Scan QR Code")
+                                ]),
+                              ),
+                            ),
+                          );
+                        }
+                      }
                     }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF5b5750)),
-                  child: InkWell(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const QRScanner())),
-                    child: Padding(
-                      padding: const EdgeInsets.all(48.0),
-                      child: Column(children: const [
-                        Icon(Icons.qr_code_scanner),
-                        Text("Scan QR Code")
-                      ]),
-                    ),
-                  ),
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
+                  future:
+                      isAuthority(accountInfo.accountInfo["accountAddress"]!),
                 );
               }),
             ),
@@ -126,5 +156,6 @@ Future<bool> isAuthority(String _accountAddress) async {
       .eq("account_address", _accountAddress)
       .then((value) => fetchedInfo = value);
   print("IsAuthority: $fetchedInfo");
-  return fetchedInfo == [];
+  print("IsAuthority: ${fetchedInfo.isEmpty}");
+  return fetchedInfo.isEmpty;
 }

@@ -52,10 +52,14 @@ class QRScannerResponsePage extends StatelessWidget {
 
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   const Icon(Icons.location_on_outlined),
-                  Text(
-                    receiver!,
-                    style: GoogleFonts.montserrat(
-                        fontSize: 32, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Text(
+                      receiver!,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.montserrat(
+                          fontSize: 32, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ]),
                 Text(
@@ -69,10 +73,14 @@ class QRScannerResponsePage extends StatelessWidget {
                 // ),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   const Icon(Icons.location_on),
-                  Text(
-                    sender!,
-                    style: GoogleFonts.montserrat(
-                        fontSize: 32, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Text(
+                      sender!,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.montserrat(
+                          fontSize: 32, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ]),
                 ElevatedButton(
@@ -91,10 +99,12 @@ class QRScannerResponsePage extends StatelessWidget {
                       const SizedBox(
                         width: 16,
                       ),
-                      Text(
-                        "Start Journey",
-                        style: GoogleFonts.montserrat(
-                            fontSize: 18, fontWeight: FontWeight.w600),
+                      Flexible(
+                        child: Text(
+                          "Start Journey",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
                       )
                     ],
                   ),
