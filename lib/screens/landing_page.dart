@@ -75,7 +75,7 @@ class _LandingPageState extends State<LandingPage> {
                           child: Text("${snapshot.error} has occurred"),
                         );
                       } else if (snapshot.hasData) {
-                        if (snapshot.data!) {
+                        if (snapshot.data! == true) {
                           return ElevatedButton(
                             onPressed: () {
                               // Don't put anything here
@@ -152,9 +152,12 @@ Future<bool> isAuthority(String _accountAddress) async {
   late dynamic fetchedInfo;
   await supabase
       .from('driver')
-      .select("account_address")
+      .select()
       .eq("account_address", _accountAddress)
-      .then((value) => fetchedInfo = value);
+      .then((value) {
+    print(value);
+    return fetchedInfo = value;
+  });
   print("IsAuthority: $fetchedInfo");
   print("IsAuthority: ${fetchedInfo.isEmpty}");
   return fetchedInfo.isEmpty;
