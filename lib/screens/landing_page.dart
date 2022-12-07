@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:live_tracking/constants/user_type.dart';
 import 'package:live_tracking/screens/login_page.dart';
 import 'package:live_tracking/models/AccountInfo.dart';
+import 'package:live_tracking/screens/map_page.dart';
 import 'package:live_tracking/screens/qrscanner_mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
@@ -84,7 +86,14 @@ class _LandingPageState extends State<LandingPage> {
                                 backgroundColor: const Color(0xFF5b5750)),
                             child: InkWell(
                               onTap: () {
-                                // Put the authority tracking page in Navigator.pushReplacement here
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MapPage(
+                                        userType: UserType.authority,
+                                        driverId: 'driver1',
+                                      ),
+                                    ));
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(48.0),
