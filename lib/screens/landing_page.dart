@@ -162,7 +162,7 @@ Future<bool> isAuthority(String _accountAddress) async {
   await supabase
       .from('driver')
       .select()
-      .eq("account_address", _accountAddress)
+      .eq("account_address", _accountAddress.toLowerCase())
       .then((value) {
     print(value);
     return fetchedInfo = value;
