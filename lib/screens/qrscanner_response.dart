@@ -6,9 +6,10 @@ import 'package:live_tracking/screens/map_page.dart';
 import 'package:provider/provider.dart';
 
 class QRScannerResponsePage extends StatelessWidget {
-  final sender, receiver;
+  final sender, receiver, userType;
   // ignore: prefer_const_constructors_in_immutables
-  QRScannerResponsePage({super.key, this.sender, this.receiver});
+  QRScannerResponsePage(
+      {super.key, this.sender, this.receiver, this.userType = UserType.driver});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,9 @@ class QRScannerResponsePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Consignment Transit",
+                  userType == UserType.authority
+                      ? "Consignment Successfully Received"
+                      : "Consignment Transit",
                   style: GoogleFonts.lora(
                     fontSize: 24,
                   ),
@@ -84,24 +87,38 @@ class QRScannerResponsePage extends StatelessWidget {
                   ),
                 ]),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: userType == UserType.driver
+                        ? Colors.blue
+                        : Colors.green,
+                  ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => MapPage(
-                                  userType: UserType.driver,
-                                )));
+                    if (userType == UserType.authority) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => MapPage(
+                                    userType: UserType.driver,
+                                  )));
+                    }
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.bus_alert),
+                      userType == UserType.authority
+                          ? const Icon(Icons.check)
+                          : const Icon(Icons.bus_alert),
                       const SizedBox(
                         width: 16,
                       ),
                       Flexible(
                         child: Text(
-                          "Start Journey",
+                          userType == UserType.authority
+                              ? "Done"
+                              : "Start Journey",
                           style: GoogleFonts.montserrat(
                               fontSize: 18, fontWeight: FontWeight.w600),
                         ),
