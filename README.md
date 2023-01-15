@@ -1,16 +1,11 @@
-# live_tracking
+# Consignment Tracker app for Project Mudrika
 
-A new Flutter project.
+This app facilitates consignment tracking, via live location updates and periodic location updates to a blockchain smart contract. Aimed at providing a transparent solution to the disaster management and relief infrastructure of the nation.
 
-## Getting Started
+Features:
 
-This project is a starting point for a Flutter application.
+- QR Scanner for scanning of the consignment details from the shipment.
+- Live location tracking via OpenStreetMaps and a [websocket server](https://github.com/Project-Mudrika/mudrika-websocket-server).
+- Log in with Metamask app to enable interaction with smart contract to store periodic locations of consignment to ensure transparency.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Project Demos - https://drive.google.com/drive/folders/1Gc2gu8kdHcqIU-ZriJ3bl80izLFlPCYG?usp=sharing
