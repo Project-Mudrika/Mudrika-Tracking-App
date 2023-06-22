@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_tracking/constants/user_type.dart';
 import 'package:live_tracking/models/Consignment.dart';
 import 'package:live_tracking/screens/landing_page.dart';
 import 'package:live_tracking/screens/qrscanner_response.dart';
@@ -6,7 +7,8 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 class QRScanner extends StatefulWidget {
-  const QRScanner({super.key});
+  final userType;
+  const QRScanner({super.key, this.userType = UserType.driver});
 
   @override
   State<QRScanner> createState() => _QRScannerState();
@@ -54,7 +56,10 @@ class _QRScannerState extends State<QRScanner> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => QRScannerResponsePage(
-                          sender: value[0], receiver: value[1]),
+                        sender: value[0],
+                        receiver: value[1],
+                        userType: widget.userType,
+                      ),
                     ));
               });
               debugPrint('Barcode found! $code');

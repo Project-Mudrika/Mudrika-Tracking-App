@@ -78,31 +78,60 @@ class _LandingPageState extends State<LandingPage> {
                         );
                       } else if (snapshot.hasData) {
                         if (snapshot.data! == true) {
-                          return ElevatedButton(
-                            onPressed: () {
-                              // Don't put anything here
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF5b5750)),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MapPage(
-                                        userType: UserType.authority,
-                                        driverId: 'driver1',
-                                      ),
-                                    ));
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(48.0),
-                                child: Column(children: const [
-                                  Icon(Icons.location_on_sharp),
-                                  Text("Track latest consignment")
-                                ]),
+                          return Column(
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Don't put anything here
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF5b5750)),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MapPage(
+                                            userType: UserType.authority,
+                                            driverId: 'driver1',
+                                          ),
+                                        ));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 58.0, vertical: 48.0),
+                                    child: Column(children: const [
+                                      Icon(Icons.location_on_sharp),
+                                      Text("Track latest consignment")
+                                    ]),
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(height: 10),
+                              ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF5b5750)),
+                                child: InkWell(
+                                  onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const QRScanner(
+                                                userType: UserType.authority,
+                                              ))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12.0, vertical: 48.0),
+                                    child: Column(children: const [
+                                      Icon(Icons.qr_code_scanner),
+                                      Text(
+                                        "Scan QR Code of Received Consignment",
+                                      )
+                                    ]),
+                                  ),
+                                ),
+                              ),
+                            ],
                           );
                         } else {
                           return ElevatedButton(
@@ -149,7 +178,7 @@ Future<dynamic> fetchAccountInfo(String _accountAddress) async {
   var response = await supabase
       .from('driver')
       .select()
-      .eq("walletid", _accountAddress)
+      .eq("walletid", _accountAddress.toLowerCase())
       .then((value) {
     print(value);
     accountDetails = value;
@@ -162,7 +191,7 @@ Future<bool> isAuthority(String _accountAddress) async {
   await supabase
       .from('driver')
       .select()
-      .eq("walletid", _accountAddress)
+      .eq("walletid", _accountAddress.toLowerCase())
       .then((value) {
     print(value);
     return fetchedInfo = value;
