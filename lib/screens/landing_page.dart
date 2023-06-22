@@ -149,7 +149,7 @@ Future<dynamic> fetchAccountInfo(String _accountAddress) async {
   var response = await supabase
       .from('driver')
       .select()
-      .eq("account_address", _accountAddress)
+      .eq("walletid", _accountAddress)
       .then((value) {
     print(value);
     accountDetails = value;
@@ -162,7 +162,7 @@ Future<bool> isAuthority(String _accountAddress) async {
   await supabase
       .from('driver')
       .select()
-      .eq("account_address", _accountAddress)
+      .eq("walletid", _accountAddress)
       .then((value) {
     print(value);
     return fetchedInfo = value;
